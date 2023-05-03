@@ -1,22 +1,13 @@
 import React, {useState,useEffect}from 'react'
+import { workTime, shortBreak, longBreak } from '../timeSettings/timeSettings';
+import StartStopButton from '../StartStopButton/StartStopButton';
+import CountdownTimer from '../CountdownTimer/CountdownTimer';
+
+
+
 
 export default function CountDown() {
-  const workTime = {
-    min : 0,
-    sec : 10,
-    id  : "workTime"
-}
-  const shortBreak = {
-    min : 0,
-    sec : 2,
-    id  : "shortBreak"
-  }
   
-  const longBreak = {
-    min : 0,
-    sec : 5,
-    id  : "longBreak"
-  }
 
   const [timeLeft,setTimeLeft] = useState(workTime);
   const [isRunning,setIsRunning] = useState(false);
@@ -91,12 +82,9 @@ export default function CountDown() {
 
   return (
     <div>
-    <p>
-    {timeLeft.min.toString().padStart(2, '0')}:
-    {timeLeft.sec.toString().padStart(2, '0')}
-  </p>
-  <button onClick={startHandler}>Start</button>
-  <button onClick={stopHandler}>Stop</button>
+    <CountdownTimer timeLeft={timeLeft} />
+    <StartStopButton startHandler={startHandler} stopHandler={stopHandler} />
+
   </div>
   )
 }
