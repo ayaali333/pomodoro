@@ -7,7 +7,7 @@ export default function CountDown() {
   const [timeLeft, setTimeLeft] = useState(workTime);
   const [isRunning, setIsRunning] = useState(false);
   const [currentSession, setCurrentSession] = useState("workTime");
-  const [currentPeriod, setCurrentPeriod] = useState(0);
+  const [currentPeriod, setCurrentPeriod] = useState(1);
 
   const startHandler = () => {
     setIsRunning(true);
@@ -18,17 +18,27 @@ export default function CountDown() {
   };
 
   const switchToNextSession = () => {
+    if (currentSession === "workTime") {
+      if (currentPeriod === 3) {
+        setCurrentSession("longBreak");
+        setTimeLeft(longBreak);
+        setCurrentPeriod(1);
+        return;
+      }
+      setCurrentSession("shortBreak");
+      setTimeLeft(shortBreak);
+    }
+
     if (currentSession === "shortBreak") {
       setCurrentSession("workTime");
       setTimeLeft(workTime);
-    } else if (currentSession === "workTime") {
-      setCurrentSession("shortBreak");
-      setTimeLeft(shortBreak);
-      setCurrentPeriod(count => count + 1);
-    } else if (currentSession === "longBreak") {
+      setCurrentPeriod((counter) => counter + 1);
+      return;
+    }
+
+    if (currentSession === "longBreak") {
       setCurrentSession("workTime");
       setTimeLeft(workTime);
-      setCurrentPeriod(count => count + 1);
     }
   };
 
@@ -53,14 +63,6 @@ export default function CountDown() {
     }, 1000);
     return () => clearInterval(timer);
   }, [timeLeft, isRunning]);
-
-  useEffect(() => {
-    if (currentPeriod === 3) {
-      setCurrentSession("longBreak");
-      setTimeLeft(longBreak);
-      setCurrentPeriod(0);
-    }
-  }, [currentPeriod]);
 
   return (
     <div>
