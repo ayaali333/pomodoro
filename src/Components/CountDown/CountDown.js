@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { workTime, shortBreak, longBreak } from "../timeSettings/timeSettings";
+import {
+  periods,
+  decrementOneSec,
+  determineNextPeriod,
+} from "../timeSettings/timeSettings";
 import StartStopButton from "../StartStopButton/StartStopButton";
 import CountdownTimer from "../CountdownTimer/CountdownTimer";
 
 export default function CountDown() {
-  const [timeLeft, setTimeLeft] = useState(workTime);
+  const [timeLeft, setTimeLeft] = useState(periods.workTime);
   const [isRunning, setIsRunning] = useState(false);
-  const [currentSession, setCurrentSession] = useState("workTime");
+  const [currentSession, setCurrentSession] = useState(periods.workTime.id);
   const [currentPeriod, setCurrentPeriod] = useState(1);
 
   const startHandler = () => {
@@ -18,48 +22,31 @@ export default function CountDown() {
   };
 
   const switchToNextSession = () => {
-    if (currentSession === "workTime") {
-      if (currentPeriod === 3) {
-        setCurrentSession("longBreak");
-        setTimeLeft(longBreak);
-        setCurrentPeriod(1);
-        return;
-      }
-      setCurrentSession("shortBreak");
-      setTimeLeft(shortBreak);
+    determineNextPeriod(
+      currentSession,
+      currentPeriod,
+      setCurrentSession,
+      setCurrentPeriod,
+      setTimeLeft
+    );
+    if (currentPeriod === 5) {
+      setCurrentPeriod(0);
     }
-
-    if (currentSession === "shortBreak") {
-      setCurrentSession("workTime");
-      setTimeLeft(workTime);
-      setCurrentPeriod((counter) => counter + 1);
-      return;
-    }
-
-    if (currentSession === "longBreak") {
-      setCurrentSession("workTime");
-      setTimeLeft(workTime);
-    }
-  };
-
-  const decrementTimeLeft = () => {
-    if (timeLeft.sec === 0) {
-      if (timeLeft.min === 0) {
-        switchToNextSession();
-        setIsRunning(false);
-      } else {
-        setTimeLeft({ min: timeLeft.min - 1, sec: 59 });
-      }
-    } else {
-      setTimeLeft({ min: timeLeft.min, sec: timeLeft.sec - 1 });
-    }
+    setCurrentPeriod((count) => count + 1);
+    setIsRunning(!isRunning);
   };
 
   useEffect(() => {
     const timer = setInterval(() => {
-      if (isRunning) {
-        decrementTimeLeft();
+      if (!isRunning) {
+        return;
       }
+      decrementOneSec(
+        timeLeft.sec,
+        timeLeft.min,
+        switchToNextSession,
+        setTimeLeft
+      );
     }, 1000);
     return () => clearInterval(timer);
   }, [timeLeft, isRunning]);
