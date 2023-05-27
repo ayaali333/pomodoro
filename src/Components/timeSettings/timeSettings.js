@@ -16,37 +16,35 @@ export const periods = {
   },
 };
 
-export const decrementOneSec = (sec, min, switchToNextSession, setTimeLeft) => {
+export const decrementOneSec = (
+  sec,
+  min,
+  switchToNextSession,
+  setCurrentPeriod
+) => {
   if (sec === 0) {
     if (min === 0) {
       switchToNextSession();
     } else {
-      setTimeLeft({ min: min - 1, sec: 59 });
+      setCurrentPeriod((currentPeriod) => {
+        return { ...currentPeriod, min: min - 1, sec: 59 };
+      });
     }
   } else {
-    setTimeLeft({ min: min, sec: sec - 1 });
+    setCurrentPeriod((currentPeriod) => {
+      return { ...currentPeriod, min: min, sec: sec - 1 };
+    });
   }
 };
 
-export const determineNextPeriod = (
-  currentSession,
-  currentPeriod,
-  setCurrentSession,
-  setCurrentPeriod,
-  setTimeLeft
-) => {
-  if (currentPeriod === 5) {
-    setCurrentSession(periods.longBreak.id);
-    setTimeLeft(periods.longBreak);
-    return;
+export const determineNextPeriod = (currentPeriod, counter) => {
+  if (counter === 5) {
+    return periods.longBreak;
   }
 
-  if (currentSession === periods.workTime.id) {
-    setCurrentSession(periods.shortBreak.id);
-    setTimeLeft(periods.shortBreak);
-    return;
+  if (currentPeriod.id === periods.workTime.id) {
+    return periods.shortBreak;
   }
 
-  setCurrentSession(periods.workTime.id);
-  setTimeLeft(periods.workTime);
+  return periods.workTime;
 };

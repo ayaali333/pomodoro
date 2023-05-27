@@ -8,11 +8,9 @@ import StartStopButton from "../StartStopButton/StartStopButton";
 import CountdownTimer from "../CountdownTimer/CountdownTimer";
 
 export default function CountDown() {
-  const [timeLeft, setTimeLeft] = useState(periods.workTime);
+  const [currentPeriod, setCurrentPeriod] = useState({ ...periods.workTime });
   const [isRunning, setIsRunning] = useState(false);
-  const [currentSession, setCurrentSession] = useState(periods.workTime.id);
-  const [currentPeriod, setCurrentPeriod] = useState(1);
-
+  const [counter, setCounter] = useState(1);
   const startHandler = () => {
     setIsRunning(true);
   };
@@ -22,17 +20,12 @@ export default function CountDown() {
   };
 
   const switchToNextSession = () => {
-    determineNextPeriod(
-      currentSession,
-      currentPeriod,
-      setCurrentSession,
-      setCurrentPeriod,
-      setTimeLeft
-    );
-    if (currentPeriod === 5) {
-      setCurrentPeriod(0);
+    const nextPeriod = determineNextPeriod(currentPeriod, counter);
+    setCurrentPeriod(nextPeriod);
+    setCounter((count) => count + 1);
+    if (counter === 5) {
+      setCounter(0);
     }
-    setCurrentPeriod((count) => count + 1);
     setIsRunning(!isRunning);
   };
 
@@ -42,18 +35,18 @@ export default function CountDown() {
         return;
       }
       decrementOneSec(
-        timeLeft.sec,
-        timeLeft.min,
+        currentPeriod.sec,
+        currentPeriod.min,
         switchToNextSession,
-        setTimeLeft
+        setCurrentPeriod
       );
     }, 1000);
     return () => clearInterval(timer);
-  }, [timeLeft, isRunning]);
+  }, [currentPeriod, isRunning]);
 
   return (
     <div>
-      <CountdownTimer timeLeft={timeLeft} />
+      <CountdownTimer currentPeriod={currentPeriod} />
       <StartStopButton startHandler={startHandler} stopHandler={stopHandler} />
     </div>
   );

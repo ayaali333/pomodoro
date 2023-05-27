@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-const CountdownTimer = ({ timeLeft }) => {
+const CountdownTimer = ({ currentPeriod }) => {
   return (
     <p>
-      {timeLeft.min.toString().padStart(2, '0')}:
-      {timeLeft.sec.toString().padStart(2, '0')}
+      {currentPeriod.min.toString().padStart(2, "0")}:
+      {currentPeriod.sec.toString().padStart(2, "0")}
     </p>
   );
 };
