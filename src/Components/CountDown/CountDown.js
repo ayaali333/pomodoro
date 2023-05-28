@@ -11,6 +11,8 @@ export default function CountDown() {
   const [currentPeriod, setCurrentPeriod] = useState({ ...periods.workTime });
   const [isRunning, setIsRunning] = useState(false);
   const [counter, setCounter] = useState(1);
+
+  
   const startHandler = () => {
     setIsRunning(true);
   };
