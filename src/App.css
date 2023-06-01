@@ -1,0 +1,15 @@
+* {
+  font-family: fantasy;
+}
+body {
+  background: linear-gradient(to left, #cdb4db, #ffc8dd, #ffafcc);
+}
+
+.text {
+  color: #2ec4b6;
+}
+
+.button {
+  background-color: #ffc8dd;
+  color: #2ec4b6;
+}
