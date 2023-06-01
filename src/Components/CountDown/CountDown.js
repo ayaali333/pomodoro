@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.css";
 import {
   periods,
   decrementOneSec,
@@ -12,7 +13,6 @@ export default function CountDown() {
   const [isRunning, setIsRunning] = useState(false);
   const [counter, setCounter] = useState(1);
 
-  
   const startHandler = () => {
     setIsRunning(true);
   };
@@ -47,9 +47,17 @@ export default function CountDown() {
   }, [currentPeriod, isRunning]);
 
   return (
-    <div>
-      <CountdownTimer currentPeriod={currentPeriod} />
-      <StartStopButton startHandler={startHandler} stopHandler={stopHandler} />
+    <div
+      class=" d-flex align-items-center justify-content-center shadow-sm shadow-lg-md "
+      style={{ height: "100vh" }}
+    >
+      <div className="square border w-50 rounded shadow">
+        <CountdownTimer currentPeriod={currentPeriod} />
+        <StartStopButton
+          startHandler={startHandler}
+          stopHandler={stopHandler}
+        />
+      </div>
     </div>
   );
 }

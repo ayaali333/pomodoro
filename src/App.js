@@ -1,9 +1,10 @@
-import './App.css';
-import CountDown from './Components/CountDown/CountDown';
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.css";
+import CountDown from "./Components/CountDown/CountDown";
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <CountDown />
     </div>
   );
