@@ -11,4 +11,3 @@ const CountdownTimer = ({ currentPeriod }) => {
 };
 
 export default CountdownTimer;
-

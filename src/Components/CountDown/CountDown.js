@@ -5,7 +5,7 @@ import {
   decrementOneSec,
   determineNextPeriod,
 } from "../timeSettings/timeSettings";
-import StartStopButton from "../StartStopButton/StartStopButton";
+import Button from "../StartStopButton/StartStopButton";
 import CountdownTimer from "../CountdownTimer/CountdownTimer";
 
 export default function CountDown() {
@@ -19,6 +19,10 @@ export default function CountDown() {
 
   const stopHandler = () => {
     setIsRunning(false);
+  };
+
+  const nextSessionHandler = () => {
+    switchToNextSession();
   };
 
   const switchToNextSession = () => {
@@ -47,16 +51,23 @@ export default function CountDown() {
   }, [currentPeriod, isRunning]);
 
   return (
-    <div
-      class=" d-flex align-items-center justify-content-center shadow-sm shadow-lg-md "
-      style={{ height: "100vh" }}
-    >
-      <div className="square border w-50 rounded shadow">
-        <CountdownTimer currentPeriod={currentPeriod} />
-        <StartStopButton
-          startHandler={startHandler}
-          stopHandler={stopHandler}
-        />
+    <div className="container ">
+      <div className="row ">
+        <div className=" col-12 col-md-6 offset-md-3 square border p-3 rounded shadow">
+          <div className="">
+            <CountdownTimer currentPeriod={currentPeriod} />
+          </div>
+          <div className="d-flex justify-content-center align-items-center ">
+            {!isRunning ? (
+              <Button action={startHandler} id="start" />
+            ) : (
+              <Button action={stopHandler} id="stop" />
+            )}
+            {isRunning ? (
+              <Button action={nextSessionHandler} id="nextSession" />
+            ) : null}
+          </div>
+        </div>
       </div>
     </div>
   );
